@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 INCH=25.4
 PADDING=3
@@ -9,10 +9,19 @@ def get_dpi(image):
     dpi_x, dpi_y = image.info.get('dpi', (96, 96))  # default to 96 DPI if not set
     return dpi_x, dpi_y
 
+def print_label(text: str, canvas):
+    draw = ImageDraw.Draw(canvas)
+    font = ImageFont.load_default()
+    text_width, text_height = draw.textsize(text, font=font)
+    x = (canvas.width - text_width) / 2
+    y = canvas.height - text_height - 10  # 10 pixels padding from the bottom
+    draw.text((x, y), text, fill="black", font=font)
+
 def main():
     # Get the command line arguments
     input_image_path = sys.argv[1]
     output_image_path = sys.argv[2]
+    label = sys.argv[3] if len(sys.argv) > 3 else None
 
     # Open the input image
     input_image = Image.open(input_image_path)
@@ -53,7 +62,8 @@ def main():
             draw.line([(0, image_paste_y), (canvas_width, image_paste_y)], fill="black")
             draw.line([(0, image_paste_y + input_image.height+1), (canvas_width,  image_paste_y + input_image.height+1)], fill="black")
 
-    # draw last guide lines
+    if label:
+        print_label(label, canvas)
 
     # Save the resulting canvas
     canvas.save(output_image_path, dpi=(dpi_x, dpi_y))
