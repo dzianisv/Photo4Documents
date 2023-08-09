@@ -19,7 +19,6 @@ def print_label(text: str, canvas):
 
 def process(input_image, label=None):
     # Open the input image
-    input_image = Image.open(input_image_path)
     dpi_x, dpi_y = get_dpi(input_image)
 
     # Convert the canvas size from mm to pixels
@@ -69,5 +68,7 @@ if __name__ == '__main__':
     input_image_path = sys.argv[1]
     output_image_path = sys.argv[2]
     label = sys.argv[3] if len(sys.argv) > 3 else None
-    image = process(input_image_path, label)
+
+    input_image = Image.open(input_image_path)
+    image = process(input_image, label)
     image.save(output_image_path)

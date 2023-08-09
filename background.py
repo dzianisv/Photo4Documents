@@ -2,8 +2,11 @@
 import sys
 import torch
 from carvekit.api.high import HiInterface
+import tempfile
+import os
+import PIL
 
-def process(input_path):
+def remove_background(image_path):
     # Check doc strings for more information`
     interface = HiInterface(object_type="hairs-like",  # Can be "object" or "hairs-like".
                             batch_size_seg=5,
@@ -16,8 +19,19 @@ def process(input_path):
                             trimap_erosion_iters=5,
                             fp16=False)
 
-    images_without_background = interface([input_path])
+    images_without_background = interface([image_path])
     return images_without_background[0]
+
+def process(image):
+    with tempfile.TemporaryDirectory() as temp_dir:
+        pre_path = os.path.join(temp_dir, "pre-background-removal.png")
+        post_path = os.path.join(temp_dir, "post-background-removal.png")
+
+        image.save(pre_path)
+        result_image = remove_background(pre_path)
+        result_image.save(post_path)
+        print(temp_dir)
+        return PIL.Image.open(post_path)
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -26,5 +40,5 @@ if __name__ == '__main__':
 
     input_path = sys.argv[1]
     output_path = sys.argv[2]
-    image = process(input_path, output_path)
+    image = remove_background(input_path)
     image.save(output_path)

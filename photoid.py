@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from majormode.photoidmagick import BiometricPassportPhoto
+from majormode.photoidmagick import BiometricPassportPhoto, load_image_and_correct_orientation
 from PIL import Image
 
 
@@ -9,8 +9,23 @@ def get_dpi(image):
     dpi_x, dpi_y = image.info.get('dpi', (96, 96))  # default to 96 DPI if not set
     return dpi_x, dpi_y
 
-def process(input_image, width=400, height=500):
+
+def preprocess(rgba_image):
+    if rgba_image.mode != 'RGBA':
+        return rgba_image
+      # Create a new white RGB image
+    rgb_image = Image.new("RGB", rgba_image.size, "WHITE")
+    # Paste the RGBA image onto the RGB image, using the alpha channel as a mask
+    rgb_image.paste(rgba_image, (0, 0), rgba_image)
+    return rgb_image
+
+def process(input_image, size_mm):
     # Load the image
+
+    dpi = get_dpi(input_image)
+    size = int(size_mm[0] * dpi[0] / 25.4), int(size_mm[1] * dpi[1] / 25.4)
+
+    input_image = preprocess(input_image)
 
     """
      Build an object `BiometricPassportPhoto` from an image.
@@ -75,8 +90,7 @@ def process(input_image, width=400, height=500):
         forbid_unevenly_open_eye=False,
     )
 
-    passport_photo.build_image(width, height)
-    return passport_photo
+    return passport_photo.build_image(size)
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -84,10 +98,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     input_path = sys.argv[1]
-    input_image = Image.open(input_path)
-    dpi = get_dpi(input_image)
-
+    input_image = load_image_and_correct_orientation(input_path)
     output_path = sys.argv[2]
-    width, height = 40 * dpi[0] / 25.4, 50 * dpi[1] / 25.4
-    image = process(input_image, width, height)
+
+    image = process(input_image, (40, 50))
     image.save(output_path)
