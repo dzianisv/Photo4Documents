@@ -13,7 +13,7 @@ logger.addHandler(logging.StreamHandler(sys.stderr))
 if __name__ == "__main__":
     input_path = sys.argv[1]
     output_path = sys.argv[2]
-    size = (40, 50)
+    size = (35, 45)
 
     logger.info("Loading image \"%s\"...", input_path)
     image = photoid.load_image_and_correct_orientation(input_path)
