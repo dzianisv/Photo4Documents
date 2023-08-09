@@ -8,7 +8,7 @@ import PIL
 
 def remove_background(image_path):
     # Check doc strings for more information`
-    interface = HiInterface(object_type="hairs-like",  # Can be "object" or "hairs-like".
+    interface = HiInterface(object_type="object",  # Can be "object" or "hairs-like".
                             batch_size_seg=5,
                             batch_size_matting=1,
                             device='cuda' if torch.cuda.is_available() else 'cpu',
@@ -27,11 +27,12 @@ def process(image):
         pre_path = os.path.join(temp_dir, "pre-background-removal.png")
         post_path = os.path.join(temp_dir, "post-background-removal.png")
 
-        image.save(pre_path)
+        dpi = image.info.get('dpi')
+        image.save(pre_path, dpi=dpi)
         result_image = remove_background(pre_path)
-        result_image.save(post_path)
-        print(temp_dir)
-        return PIL.Image.open(post_path)
+        # result_image.save(post_path)
+        # print(temp_dir)
+        return result_image
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:

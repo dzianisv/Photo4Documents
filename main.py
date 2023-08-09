@@ -15,17 +15,20 @@ if __name__ == "__main__":
     output_path = sys.argv[2]
     size = (40, 50)
 
-    logger.info("Loading image %s...", input_path)
+    logger.info("Loading image \"%s\"...", input_path)
     image = photoid.load_image_and_correct_orientation(input_path)
+    dpi = image.info.get('dpi')
 
     logger.info("Removing background...")
     image = background.process(image)
+    image.save("_background-removed.png", dpi=dpi)
 
-    logger.info("Cropping image to %s...", size)
+    logger.info("Cropping image to \"%s\"...", size)
     image = photoid.process(image, size)
+    image.save("_cropped.png", dpi=dpi)
 
     logger.info("Placing photos on the list...")
     image = prepartial.process(image)
 
-    logger.info("Saving image to %s...", output_path)
+    logger.info("Saving image to \"%s\"...", output_path)
     image.save(output_path)
