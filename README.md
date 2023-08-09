@@ -12,6 +12,10 @@ Therefore, I spent a few days writing this program that utilizes the power of ma
 - Crops photo to the document photo size, 35x45mm, size can be adjusted.
 - Prepares a 100x150mm photo sheet that you can print for 30 cents at any print center.
 
+# Under the hood
+-  [face_recogniton](https://github.com/ageitgey/face_recognition): Built using dlib’s state-of-the-art face recognition built with deep learning. The model has an accuracy of 99.38% on the Labeled Faces in the Wild benchmark.
+- [carvekit](https://github.com/OPHoperHPO/image-background-remove-tool): image segmentation using tracer_7b pretrained model, bacground removal
+
 # Demo
 
 I used images from this dataset https://www.kaggle.com/datasets/ashwingupta3012/male-and-female-faces-dataset
