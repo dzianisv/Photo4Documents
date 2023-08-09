@@ -1,2 +1,2 @@
-git+https://github.com/dzianisv/image-background-remove-tool/
 photoidmagick
+git+https://github.com/dzianisv/image-background-remove-tool/#egg=carvekit

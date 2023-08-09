@@ -3,7 +3,7 @@ import sys
 import torch
 from carvekit.api.high import HiInterface
 
-def process(input_path, output_path):
+def process(input_path):
     # Check doc strings for more information`
     interface = HiInterface(object_type="hairs-like",  # Can be "object" or "hairs-like".
                             batch_size_seg=5,
@@ -17,8 +17,7 @@ def process(input_path, output_path):
                             fp16=False)
 
     images_without_background = interface([input_path])
-    images_without_background[0].save(output_path)
-
+    return images_without_background[0]
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -27,4 +26,5 @@ if __name__ == '__main__':
 
     input_path = sys.argv[1]
     output_path = sys.argv[2]
-    process(input_path, output_path)
+    image = process(input_path, output_path)
+    image.save(output_path)

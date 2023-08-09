@@ -17,12 +17,7 @@ def print_label(text: str, canvas):
     y = canvas.height - text_height - 10  # 10 pixels padding from the bottom
     draw.text((x, y), text, fill="black", font=font)
 
-def main():
-    # Get the command line arguments
-    input_image_path = sys.argv[1]
-    output_image_path = sys.argv[2]
-    label = sys.argv[3] if len(sys.argv) > 3 else None
-
+def process(input_image, label=None):
     # Open the input image
     input_image = Image.open(input_image_path)
     dpi_x, dpi_y = get_dpi(input_image)
@@ -66,7 +61,13 @@ def main():
         print_label(label, canvas)
 
     # Save the resulting canvas
-    canvas.save(output_image_path, dpi=(dpi_x, dpi_y))
+    # canvas.save(output_image_path, dpi=(dpi_x, dpi_y))
+    return canvas
 
 if __name__ == '__main__':
-    main()
+    # Get the command line arguments
+    input_image_path = sys.argv[1]
+    output_image_path = sys.argv[2]
+    label = sys.argv[3] if len(sys.argv) > 3 else None
+    image = process(input_image_path, label)
+    image.save(output_image_path)
