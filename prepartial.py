@@ -26,10 +26,11 @@ def process(input_image, label=None):
     canvas_width = int(100 / INCH * dpi_x)
     canvas_height = int(150 / INCH * dpi_y)
     canvas = Image.new("RGB", (canvas_width, canvas_height), "white")
-
+    print(f"Source photos size {input_image.width * INCH / dpi_x}x{input_image.height * INCH / dpi_y}mm")
     # Calculate how many input images can fit on the canvas
     num_images_x = canvas_width // (input_image.width + padding)
     num_images_y = canvas_height // (input_image.height + padding)
+    print(f"Photos: {num_images_x}x{num_images_y}")
 
     # Center photos if they don't fill up the entire canvas
     total_width_of_images = num_images_x * (input_image.width + padding)
@@ -38,14 +39,18 @@ def process(input_image, label=None):
     offset_y = (canvas_height - total_height_of_images) // 2
 
     draw = ImageDraw.Draw(canvas)
+    guide_line_lenght = int(0.1 * min(canvas.height, canvas.width))
 
     # Paste as many images as possible onto the canvas
     for x in range(num_images_x):
         image_paste_x = offset_x + x * (input_image.width + padding)
 
         # draw vertical guide lines
-        draw.line([(image_paste_x-1, 0), (image_paste_x-1, canvas.height)], fill="black")
-        draw.line([(image_paste_x + input_image.width+1, 0), (image_paste_x + input_image.width+1, canvas.height)], fill="black")
+        draw.line([(image_paste_x-1, 0), (image_paste_x-1, guide_line_lenght)], fill="black")
+        draw.line([(image_paste_x + input_image.width+1, 0), (image_paste_x + input_image.width+1, guide_line_lenght)], fill="black")
+
+        draw.line([(image_paste_x-1, canvas.height-guide_line_lenght), (image_paste_x-1, canvas.height)], fill="black")
+        draw.line([(image_paste_x + input_image.width+1, canvas.height-guide_line_lenght), (image_paste_x + input_image.width+1, canvas.height)], fill="black")
 
         for y in range(num_images_y):
             image_paste_y = offset_y + y * (input_image.height + padding)
@@ -53,8 +58,11 @@ def process(input_image, label=None):
             canvas.paste(input_image, (image_paste_x, image_paste_y))
 
             # draw horizontal guide lines
-            draw.line([(0, image_paste_y), (canvas_width, image_paste_y)], fill="black")
-            draw.line([(0, image_paste_y + input_image.height+1), (canvas_width,  image_paste_y + input_image.height+1)], fill="black")
+            draw.line([(0, image_paste_y), (guide_line_lenght, image_paste_y)], fill="black")
+            draw.line([(0, image_paste_y + input_image.height+1), (guide_line_lenght,  image_paste_y + input_image.height+1)], fill="black")
+
+            draw.line([(canvas_width-guide_line_lenght, image_paste_y), (canvas_width, image_paste_y)], fill="black")
+            draw.line([(canvas_width-guide_line_lenght, image_paste_y + input_image.height+1), (canvas_width,  image_paste_y + input_image.height+1)], fill="black")
 
     if label:
         print_label(label, canvas)

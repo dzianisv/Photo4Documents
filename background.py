@@ -42,4 +42,6 @@ if __name__ == '__main__':
     input_path = sys.argv[1]
     output_path = sys.argv[2]
     image = remove_background(input_path)
-    image.save(output_path)
+    dpi = image.info.get('dpi')
+    print(f"DPI: {dpi}")
+    image.save(output_path, dpi=dpi)
