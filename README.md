@@ -33,3 +33,8 @@ I used images from this dataset https://www.kaggle.com/datasets/ashwingupta3012/
     pipenv run ./main.py <origin photo file> <result photo file>
 ```
 
+
+# Futher improvements
+
+- https://github.com/hukkelas/DSFD-Pytorch-Inference, RetinaNetMobileNetV1, 270ms on Intel i7
+- https://github.com/ageitgey/face_recognition, dlib face detection, dlib takes time to build
