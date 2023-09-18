@@ -38,3 +38,9 @@ I used images from this dataset https://www.kaggle.com/datasets/ashwingupta3012/
 
 - https://github.com/hukkelas/DSFD-Pytorch-Inference, RetinaNetMobileNetV1, 270ms on Intel i7
 - https://github.com/ageitgey/face_recognition, dlib face detection, dlib takes time to build
+
+# Alternatives
+
+- https://aipassportphoto.com/ $5 for a photoset
+- https://photogov.com/documents/eu-visa-photo/, works good
+- https://www.atlys.com/tools/passport-photo| An error occurred while processing your photo. Please try again, or contact us if you continue to have errors. The error was: Could not parse content as FormData.
