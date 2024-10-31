@@ -28,7 +28,7 @@ if __name__ == "__main__":
     image.save("_cropped.png", dpi=dpi)
 
     logger.info("Placing photos on the list...")
-    image = prepartial.process(image)
+    image = prepartial.process(image, dpi=dpi)
 
     logger.info("Saving image to \"%s\"...", output_path)
     image.save(output_path)
