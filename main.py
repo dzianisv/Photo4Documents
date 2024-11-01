@@ -5,6 +5,7 @@ import photoid
 import prepartial
 import logging
 import exifread
+from align_shoulders import align_shoulders
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -18,6 +19,9 @@ if __name__ == "__main__":
     logger.info("Loading image \"%s\"...", input_path)
     image = photoid.load_image_and_correct_orientation(input_path)
     dpi = image.info.get('dpi')
+
+    logger.info("Aligning image")
+    image = align_shoulders(image)
 
     logger.info("Removing background...")
     image = background.process(image)

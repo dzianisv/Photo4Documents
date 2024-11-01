@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-
 import cv2
 import numpy as np
 import mediapipe as mp
 from PIL import Image
 
-def align_shoulders(input_path, output_path):
-    # Load the image
-    image = cv2.imread(input_path)
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+def align_shoulders(image_pil):
+    # Convert PIL image to OpenCV format
+    image_rgb = np.array(image_pil)
+    image_rgb = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
 
     mp_pose = mp.solutions.pose
     pose = mp_pose.Pose(static_image_mode=True)
@@ -18,7 +17,7 @@ def align_shoulders(input_path, output_path):
 
     if not results.pose_landmarks:
         print("No shoulders detected.")
-        return
+        return image_pil  # Return the original image if no shoulders are detected
 
     # Get landmarks
     landmarks = results.pose_landmarks.landmark
@@ -30,16 +29,13 @@ def align_shoulders(input_path, output_path):
                                landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER].y])
 
     # Calculate the angle to align shoulders horizontally
-    angle = np.degrees(np.arctan2(right_shoulder[1] - left_shoulder[1],
-                                  right_shoulder[0] - left_shoulder[0]))
+    angle = np.degrees(np.arctan2(left_shoulder[1] - right_shoulder[1],
+                                  left_shoulder[0] - right_shoulder[0]))
 
     # Rotate the image to align shoulders horizontally
-    image_pil = Image.fromarray(image_rgb)
     rotated_image = image_pil.rotate(-angle, resample=Image.BICUBIC, expand=True)
 
-    # Save the aligned image
-    rotated_image.save(output_path)
-    print(f"Aligned image saved to {output_path}")
+    return rotated_image
 
 if __name__ == "__main__":
     import sys
@@ -48,4 +44,6 @@ if __name__ == "__main__":
     else:
         input_image_path = sys.argv[1]
         output_image_path = sys.argv[2]
-        align_shoulders(input_image_path, output_image_path)
+        input_image = Image.open(input_image_path)
+        rotated_image = align_shoulders(input_image)
+        rotated_image.save(output_image_path) 
