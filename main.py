@@ -20,8 +20,8 @@ if __name__ == "__main__":
     image = photoid.load_image_and_correct_orientation(input_path)
     dpi = image.info.get('dpi')
 
-    logger.info("Aligning image")
-    image = align_shoulders(image)
+    # logger.info("Aligning image")
+    # image = align_shoulders(image)
 
     logger.info("Removing background...")
     image = background.process(image)
