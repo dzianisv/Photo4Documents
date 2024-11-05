@@ -51,43 +51,190 @@
             cursor: pointer;
             border: 1px solid #000;
         }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .instructions {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .usage-guide {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
+        }
+
+        .guidelines-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .guidelines-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+        .guidelines-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .guidelines-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+        }
+
+        .guidelines-link {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .guidelines-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
-    <input type="file" id="file-input" accept="image/*">
-    <button id="download-btn" disabled>Download Photo</button>
-    <p>
-        Photo should be 2 inches by 2 inches (51 x 51 mm) with the head centered and sized between 1 inch and 1.4 inches (25 and 35 mm). 
-    </p>
-    <p>
-        The DV Lottery photo requirements specify that the image must have a resolution of 600 x 600 pixels.
-         While DPI (dots per inch) isn't directly specified, it's important to ensure the photo is clear and adheres to the pixel dimensions. 
-         Typically, a DPI of 300 is sufficient for good quality.
-        <a href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/photo-examples.html">Details</a>
-    </p>
-    
-    <canvas id="canvas" width="600" height="600"></canvas>
-    <!-- Add these controls after the download button -->
-    <div style="margin: 10px;">
-        <label>
-            <input type="checkbox" id="guidelines-toggle" checked>
-            Show Guidelines
-        </label>
-        <label style="margin-left: 20px;">
-            Scale:
-            <input type="number" id="scale-input" min="0.1" max="5" step="0.1" style="width: 70px;">
-        </label>
+    <div class="container">
+        <h1>Photo4Documents - ID Photo Editor</h1>
+
+        <div class="usage-guide">
+            <h3>How to use:</h3>
+            <div class="guide-item">
+                <span>🖱️</span>
+                <span>Use mouse wheel to zoom in/out</span>
+            </div>
+            <div class="guide-item">
+                <span>✋</span>
+                <span>Click and drag to position the photo</span>
+            </div>
+            <div class="guide-item">
+                <span>🎨</span>
+                <span>Select background color from the palette below</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="file-input-wrapper">
+                <button class="btn">Choose Photo</button>
+                <input type="file" id="file-input" accept="image/*">
+            </div>
+            <button id="download-btn" class="btn" disabled>Download Photo</button>
+        </div>
     </div>
 
-    <div class="color-palette">
-        <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
-        <div class="color-option" style="background-color: #f2f2f2;" data-color="#f2f2f2"></div>
-        <div class="color-option" style="background-color: #e0e0e0;" data-color="#e0e0e0"></div>
-        <div class="color-option" style="background-color: #cccccc;" data-color="#cccccc"></div>
-        <div class="color-option" style="background-color: #b3b3b3;" data-color="#b3b3b3"></div>
-        <div class="color-option" style="background-color: #999999;" data-color="#999999"></div>
+
+    <div style="display: flex; gap: 20px; align-items: flex-start;">
+        <canvas id="canvas" width="600" height="600"></canvas>
+
+        <div class="guidelines-container">
+            <h3>Photo Requirements</h3>
+            <ul class="guidelines-list">
+                <li>Size: 2 inches × 2 inches (51 × 51 mm)</li>
+                <li>Head position: centered</li>
+                <li>Head size: between 1 inch and 1.4 inches (25-35 mm)</li>
+                <li>Resolution: 600 × 600 pixels</li>
+                <li>Recommended DPI: 300</li>
+            </ul>
+            <a href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/photo-examples.html"
+                class="guidelines-link">🔗 Official Requirements</a>
+
+
+            <h3>Controls</h3>
+            <!-- Add these controls after the download button -->
+            <div style="margin: 10px;">
+                <label>
+                    <input type="checkbox" id="guidelines-toggle" checked>
+                    Show Guidelines
+                </label>
+                <label style="margin-left: 20px;">
+                    Scale:
+                    <input type="number" id="scale-input" min="0.1" max="5" step="0.1" style="width: 70px;">
+                </label>
+            </div>
+
+            <h3>Background Color</h3>
+            <div class="color-palette">
+                <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
+                <div class="color-option" style="background-color: #f2f2f2;" data-color="#f2f2f2"></div>
+                <div class="color-option" style="background-color: #e0e0e0;" data-color="#e0e0e0"></div>
+                <div class="color-option" style="background-color: #cccccc;" data-color="#cccccc"></div>
+                <div class="color-option" style="background-color: #b3b3b3;" data-color="#b3b3b3"></div>
+                <div class="color-option" style="background-color: #999999;" data-color="#999999"></div>
+            </div>
+        </div>
     </div>
+
 
     <script>
         const canvas = document.getElementById('canvas');
