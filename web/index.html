@@ -28,157 +28,157 @@
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <link rel="canonical" href="https://yourdomain.com/passport-photo-tool">
-    < <style>
+    <style>
         /* Add at the beginning of the style section */
         * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background-color: #f0f0f0;
-        margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
         }
 
         canvas {
-        border: 2px solid #000;
-        background-color: white;
-        cursor: grab;
+            border: 2px solid #000;
+            background-color: white;
+            cursor: grab;
         }
 
         #file-input,
         #download-btn {
-        margin: 10px;
+            margin: 10px;
         }
 
         .color-palette {
-        display: flex;
-        gap: 5px;
-        margin-bottom: 20px;
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
         }
 
         .color-option {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 1px solid #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid #000;
         }
 
         .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .instructions {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 15px;
-        margin: 15px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .controls {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 15px;
-        margin: 15px 0;
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
-        background-color: #45a049;
+            background-color: #45a049;
         }
 
         .btn:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
 
         .file-input-wrapper {
-        position: relative;
-        overflow: hidden;
-        display: inline-block;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
         }
 
         .file-input-wrapper input[type=file] {
-        font-size: 100px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-        cursor: pointer;
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
         }
 
         .usage-guide {
-        background-color: #f8f9fa;
-        border-left: 4px solid #4CAF50;
-        padding: 15px;
-        margin: 15px 0;
-        border-radius: 4px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
         }
 
         .guide-item {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        gap: 10px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
         }
 
         .guidelines-container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        max-width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
         }
 
         .guidelines-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 15px 0;
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
         }
 
         .guidelines-list li {
-        margin-bottom: 10px;
-        padding-left: 20px;
-        position: relative;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
         }
 
         .guidelines-list li:before {
-        content: "•";
-        position: absolute;
-        left: 0;
-        color: #4CAF50;
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
         }
 
         .guidelines-link {
-        color: #4CAF50;
-        text-decoration: none;
+            color: #4CAF50;
+            text-decoration: none;
         }
 
         .guidelines-link:hover {
-        text-decoration: underline;
+            text-decoration: underline;
         }
-        </style>
+    </style>
 </head>
 
 <body>
