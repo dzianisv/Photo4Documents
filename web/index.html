@@ -4,211 +4,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
+    <!-- Add this in the <head> section, before the existing <style> tag -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Free US Passport Photo & Green Card Photo Tool | Photo4Documents</title>
+    <meta name="description"
+        content="Create free passport photos and green card photos that meet US official requirements. Online tool with instant download, perfect for US passport, visa, and green card applications.">
+    <meta name="keywords"
+        content="free passport photo, US passport photo, green card photo, passport photo maker, visa photo, immigration photo, passport photo tool, 2x2 photo">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Free US Passport & Green Card Photo Maker">
+    <meta property="og:description"
+        content="Create regulation-compliant passport and green card photos instantly. Free online tool with US official requirements.">
+    <meta property="og:type" content="website">
+
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <link rel="canonical" href="https://yourdomain.com/passport-photo-tool">
+    < <style>
+        /* Add at the beginning of the style section */
+        * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f0f0f0;
+        margin: 0;
         }
 
         canvas {
-            border: 2px solid #000;
-            background-color: white;
-            cursor: grab;
+        border: 2px solid #000;
+        background-color: white;
+        cursor: grab;
         }
 
         #file-input,
         #download-btn {
-            margin: 10px;
-        }
-
-        #status-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #333;
-            color: white;
-            padding: 8px;
-            font-family: monospace;
-            text-align: center;
+        margin: 10px;
         }
 
         .color-palette {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
+        display: flex;
+        gap: 5px;
+        margin-bottom: 20px;
         }
 
         .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 1px solid #000;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 1px solid #000;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
         }
 
         .instructions {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .controls {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
         }
 
         .btn:hover {
-            background-color: #45a049;
+        background-color: #45a049;
         }
 
         .btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+        background-color: #cccccc;
+        cursor: not-allowed;
         }
 
         .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
         }
 
         .file-input-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        cursor: pointer;
         }
 
         .usage-guide {
-            background-color: #f8f9fa;
-            border-left: 4px solid #4CAF50;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #4CAF50;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
         }
 
         .guide-item {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-            gap: 10px;
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        gap: 10px;
         }
 
         .guidelines-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
         }
 
         .guidelines-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 15px 0;
+        list-style-type: none;
+        padding: 0;
+        margin: 15px 0;
         }
 
         .guidelines-list li {
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
+        margin-bottom: 10px;
+        padding-left: 20px;
+        position: relative;
         }
 
         .guidelines-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #4CAF50;
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: #4CAF50;
         }
 
         .guidelines-link {
-            color: #4CAF50;
-            text-decoration: none;
+        color: #4CAF50;
+        text-decoration: none;
         }
 
         .guidelines-link:hover {
-            text-decoration: underline;
+        text-decoration: underline;
         }
-    </style>
+        </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Photo4Documents - ID Photo Editor</h1>
+    <h1 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">
+        Free US Passport & Green Card Photo Tool
+    </h1>
 
-        <div class="usage-guide">
-            <h3>How to use:</h3>
-            <div class="guide-item">
-                <span>🖱️</span>
-                <span>Use mouse wheel to zoom in/out</span>
-            </div>
-            <div class="guide-item">
-                <span>✋</span>
-                <span>Click and drag to position the photo</span>
-            </div>
-            <div class="guide-item">
-                <span>🎨</span>
-                <span>Select background color from the palette below</span>
-            </div>
-        </div>
-
-        <div class="controls">
-            <div class="file-input-wrapper">
-                <button class="btn">Choose Photo</button>
-                <input type="file" id="file-input" accept="image/*">
-            </div>
-            <button id="download-btn" class="btn" disabled>Download Photo</button>
-        </div>
+    <!-- Add this before the canvas section -->
+    <div class="seo-text" style="text-align: center; margin-bottom: 20px; max-width: 600px;">
+        <p>Create professional passport and green card photos that meet all US official requirements. Perfect for US
+            passport, visa, and green card applications.</p>
     </div>
 
-
     <div style="display: flex; gap: 20px; align-items: flex-start;">
-        <canvas id="canvas" width="600" height="600"></canvas>
+        <div>
+            <canvas id="canvas" width="600" height="600"></canvas>
+            <div class="controls">
+                <div class="file-input-wrapper">
+                    <button class="btn">Choose Photo</button>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+                <button id="download-btn" class="btn" disabled>Download Photo</button>
+            </div>
+        </div>
 
         <div class="guidelines-container">
-            <h3>Photo Requirements</h3>
+            <h3><a
+                    href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/photo-examples.html">
+
+                    US Photo Requirements
+                </a>
+            </h3>
             <ul class="guidelines-list">
                 <li>Size: 2 inches × 2 inches (51 × 51 mm)</li>
                 <li>Head position: centered</li>
                 <li>Head size: between 1 inch and 1.4 inches (25-35 mm)</li>
                 <li>Resolution: 600 × 600 pixels</li>
-                <li>Recommended DPI: 300</li>
             </ul>
-            <a href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/photo-examples.html"
-                class="guidelines-link">🔗 Official Requirements</a>
-
+            <div class="usage-guide">
+                <h3>How to use:</h3>
+                <div class="guide-item">
+                    <span>🖱️</span>
+                    <span>Use mouse wheel to zoom in/out</span>
+                </div>
+                <div class="guide-item">
+                    <span>✋</span>
+                    <span>Click and drag to position the photo</span>
+                </div>
+                <div class="guide-item">
+                    <span>🎨</span>
+                    <span>Select background color from the palette below</span>
+                </div>
+            </div>
 
             <h3>Controls</h3>
             <!-- Add these controls after the download button -->
