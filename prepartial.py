@@ -59,9 +59,12 @@ def print_label(text: str, canvas):
     y = canvas.height - text_height - 10  # 10 pixels padding from the bottom
     draw.text((x, y), text, fill="black", font=font)
 
-def process(input_image, label=None, canvas_size_mm=(100, 150)):
+def process(input_image, label=None, canvas_size_mm=(100, 150), dpi=None):
     # Open the input image
-    dpi_x, dpi_y = get_dpi(input_image)
+    if not dpi:
+        dpi_x, dpi_y = get_dpi(input_image)
+    else:
+        dpi_x, dpi_y = dpi
 
     # Convert the canvas size from mm to pixels
     padding = int(PADDING * dpi_x / INCH)  # padding 3mm

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        canvas {
+            border: 2px solid #000;
+            background-color: white;
+            cursor: grab;
+        }
+
+        #file-input,
+        #download-btn {
+            margin: 10px;
+        }
+
+        #status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 8px;
+            font-family: monospace;
+            text-align: center;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="file-input" accept="image/*">
+    <button id="download-btn" disabled>Download Photo</button>
+    <p>
+        Photo should be 2 inches by 2 inches (51 x 51 mm) with the head centered and sized between 1 inch and 1.4 inches (25 and 35 mm). 
+    </p>
+    <p>
+        The DV Lottery photo requirements specify that the image must have a resolution of 600 x 600 pixels.
+         While DPI (dots per inch) isn't directly specified, it's important to ensure the photo is clear and adheres to the pixel dimensions. 
+         Typically, a DPI of 300 is sufficient for good quality.
+        <a href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/photo-examples.html">Details</a>
+    </p>
+    
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <!-- Add these controls after the download button -->
+    <div style="margin: 10px;">
+        <label>
+            <input type="checkbox" id="guidelines-toggle" checked>
+            Show Guidelines
+        </label>
+        <label style="margin-left: 20px;">
+            Scale:
+            <input type="number" id="scale-input" min="0.1" max="5" step="0.1" style="width: 70px;">
+        </label>
+    </div>
+
+    <div class="color-palette">
+        <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
+        <div class="color-option" style="background-color: #f2f2f2;" data-color="#f2f2f2"></div>
+        <div class="color-option" style="background-color: #e0e0e0;" data-color="#e0e0e0"></div>
+        <div class="color-option" style="background-color: #cccccc;" data-color="#cccccc"></div>
+        <div class="color-option" style="background-color: #b3b3b3;" data-color="#b3b3b3"></div>
+        <div class="color-option" style="background-color: #999999;" data-color="#999999"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const fileInput = document.getElementById('file-input');
+        const downloadBtn = document.getElementById('download-btn');
+        let scale = 1;
+        let position = { x: 0, y: 0 };
+        let currentImage = null;
+
+        const guidelinesToggle = document.getElementById('guidelines-toggle');
+        const scaleInput = document.getElementById('scale-input');
+        const colorOptions = document.querySelectorAll('.color-option');
+
+        // Update scale input when scale changes
+        function updateScaleInput() {
+            scaleInput.value = scale.toFixed(2);
+        }
+
+        // Modify drawCanvas function to check guidelines toggle
+        function drawCanvas() {
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (currentImage) {
+                const centerX = (canvas.width - currentImage.width * scale) / 2;
+                const centerY = (canvas.height - currentImage.height * scale) / 2;
+
+                ctx.drawImage(
+                    currentImage,
+                    centerX + position.x,
+                    centerY + position.y,
+                    currentImage.width * scale,
+                    currentImage.height * scale
+                );
+
+                if (guidelinesToggle.checked) {
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = '#ff0000';
+                    ctx.beginPath();
+                    // Horizontal line
+                    ctx.moveTo(150, 300);
+                    ctx.lineTo(450, 300);
+                    // Vertical line
+                    ctx.moveTo(300, 150);
+                    ctx.lineTo(300, 450);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                ctx.fillStyle = this.dataset.color;
+                drawCanvas();
+            });
+        });
+
+        scaleInput.addEventListener('input', function () {
+            scale = parseFloat(scaleInput.value);
+            drawCanvas();
+        });
+
+        guidelinesToggle.addEventListener('change', function () {
+            drawCanvas();
+        });
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        currentImage = img;
+                        const widthScale = canvas.width / img.width;
+                        const heightScale = canvas.height / img.height;
+                        scale = Math.min(widthScale, heightScale);
+                        position = { x: 0, y: 0 };
+                        drawCanvas();
+                        updateScaleInput();
+                        downloadBtn.disabled = false;
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        let isDragging = false;
+        let startX, startY;
+
+        canvas.addEventListener('mousedown', function (event) {
+            isDragging = true;
+            startX = event.clientX - position.x;
+            startY = event.clientY - position.y;
+            canvas.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', function (event) {
+            if (isDragging) {
+                position.x = event.clientX - startX;
+                position.y = event.clientY - startY;
+                drawCanvas();
+                updateScaleInput();
+            }
+        });
+
+        document.addEventListener('mouseup', function () {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        });
+
+        canvas.addEventListener('wheel', function (event) {
+            event.preventDefault();
+            if (currentImage) {
+                const delta = Math.sign(event.deltaY) * -0.1;
+                scale = Math.min(Math.max(0.1, scale + delta), 3);
+                drawCanvas();
+                updateScaleInput();
+            }
+        });
+
+        downloadBtn.addEventListener('click', function () {
+            const link = document.createElement('a');
+            link.download = 'passport-photo.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        });
+
+        // Initial white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    </script>
+</body>
+
+</html>

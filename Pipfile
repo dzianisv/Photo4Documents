@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 photoidmagick = "*"
-carvekit = {git = "https://github.com/dzianisv/image-background-remove-tool/"}
+carvekit = "*"
 
 [dev-packages]
 
