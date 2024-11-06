@@ -28,6 +28,11 @@
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <link rel="canonical" href="https://yourdomain.com/passport-photo-tool">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/deeplab@latest"></script>
+    <script src="./lib.js" crossorigin="anonymous"></script>
+
     <style>
         /* Add at the beginning of the style section */
         * {
@@ -197,10 +202,10 @@
             <canvas id="canvas" width="600" height="600"></canvas>
             <div class="controls">
                 <div class="file-input-wrapper">
-                    <button class="btn">Choose Photo</button>
+                    <button class="btn">📸 Upload Photo</button>
                     <input type="file" id="file-input" accept="image/*">
                 </div>
-                <button id="download-btn" class="btn" disabled>Download Photo</button>
+                <button id="download-btn" class="btn" disabled>⬇️ Download Photo</button>
             </div>
         </div>
 
@@ -238,10 +243,10 @@
             <div style="margin: 10px;">
                 <label>
                     <input type="checkbox" id="guidelines-toggle" checked>
-                    Show Guidelines
+                    💁‍♂️ Show Guidelines
                 </label>
                 <label style="margin-left: 20px;">
-                    Scale:
+                    🔍 Scale:
                     <input type="number" id="scale-input" min="0.1" max="5" step="0.1" style="width: 70px;">
                 </label>
             </div>
@@ -292,19 +297,19 @@
                     currentImage.width * scale,
                     currentImage.height * scale
                 );
+            }
 
-                if (guidelinesToggle.checked) {
-                    ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = '#ff0000';
-                    ctx.beginPath();
-                    // Horizontal line
-                    ctx.moveTo(150, 300);
-                    ctx.lineTo(450, 300);
-                    // Vertical line
-                    ctx.moveTo(300, 150);
-                    ctx.lineTo(300, 450);
-                    ctx.stroke();
-                }
+            if (guidelinesToggle.checked) {
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = '#ff0000';
+                ctx.beginPath();
+                // Horizontal line
+                ctx.moveTo(150, 300);
+                ctx.lineTo(450, 300);
+                // Vertical line
+                ctx.moveTo(300, 150);
+                ctx.lineTo(300, 450);
+                ctx.stroke();
             }
         }
 
