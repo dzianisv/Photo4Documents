@@ -4,12 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Add this in the <head> section, before the existing <style> tag -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
     <title>Free US Passport Photo & Green Card Photo Tool | Photo4Documents</title>
@@ -28,13 +25,12 @@
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <link rel="canonical" href="https://yourdomain.com/passport-photo-tool">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/deeplab@latest"></script>
-    <script src="./lib.js" crossorigin="anonymous"></script>
+    <script src="lib.js"></script>
 
     <style>
-        /* Add at the beginning of the style section */
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -183,6 +179,39 @@
         .guidelines-link:hover {
             text-decoration: underline;
         }
+
+        /* Spinner and overlay styles */
+        .spinner-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #4CAF50;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -191,7 +220,6 @@
         Free US Passport & Green Card Photo Tool
     </h1>
 
-    <!-- Add this before the canvas section -->
     <div class="seo-text" style="text-align: center; margin-bottom: 20px; max-width: 600px;">
         <p>Create professional passport and green card photos that meet all US official requirements. Perfect for US
             passport, visa, and green card applications.</p>
@@ -206,6 +234,7 @@
                     <input type="file" id="file-input" accept="image/*">
                 </div>
                 <button id="download-btn" class="btn" disabled>⬇️ Download Photo</button>
+                <button id="remove-bg-btn" class="btn" disabled>🧹 AI Remove Background</button>
             </div>
         </div>
 
@@ -239,7 +268,6 @@
             </div>
 
             <h3>Controls</h3>
-            <!-- Add these controls after the download button -->
             <div style="margin: 10px;">
                 <label>
                     <input type="checkbox" id="guidelines-toggle" checked>
@@ -263,12 +291,18 @@
         </div>
     </div>
 
+    <!-- Spinner Overlay -->
+    <div class="spinner-overlay" id="spinner-overlay">
+        <div class="spinner"></div>
+    </div>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const fileInput = document.getElementById('file-input');
         const downloadBtn = document.getElementById('download-btn');
+        const removeBgBtn = document.getElementById('remove-bg-btn');
+        const spinnerOverlay = document.getElementById('spinner-overlay');
         let scale = 1;
         let position = { x: 0, y: 0 };
         let currentImage = null;
@@ -277,12 +311,10 @@
         const scaleInput = document.getElementById('scale-input');
         const colorOptions = document.querySelectorAll('.color-option');
 
-        // Update scale input when scale changes
         function updateScaleInput() {
             scaleInput.value = scale.toFixed(2);
         }
 
-        // Modify drawCanvas function to check guidelines toggle
         function drawCanvas() {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -303,10 +335,8 @@
                 ctx.setLineDash([5, 5]);
                 ctx.strokeStyle = '#ff0000';
                 ctx.beginPath();
-                // Horizontal line
                 ctx.moveTo(150, 300);
                 ctx.lineTo(450, 300);
-                // Vertical line
                 ctx.moveTo(300, 150);
                 ctx.lineTo(300, 450);
                 ctx.stroke();
@@ -344,6 +374,7 @@
                         drawCanvas();
                         updateScaleInput();
                         downloadBtn.disabled = false;
+                        removeBgBtn.disabled = false;
                     };
                     img.src = e.target.result;
                 };
@@ -392,7 +423,21 @@
             link.click();
         });
 
-        // Initial white background
+        removeBgBtn.addEventListener('click', async function () {
+            if (!currentImage) return;
+
+            spinnerOverlay.style.display = 'flex';
+            try {
+                const resultImage = await removeBackground(currentImage);
+                currentImage = resultImage;
+                drawCanvas();
+            } catch (error) {
+                console.error('Error removing background:', error);
+            } finally {
+                spinnerOverlay.style.display = 'none';
+            }
+        });
+
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     </script>
